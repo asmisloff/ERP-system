@@ -1,4 +1,4 @@
-package ru.geekbrains.controller;
+package ru.geekbrains.erpsystem.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

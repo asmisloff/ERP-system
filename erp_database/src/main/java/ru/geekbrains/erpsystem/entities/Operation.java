@@ -1,13 +1,13 @@
-package ru.geekbrains.entities;
+package ru.geekbrains.erpsystem.entities;
 
 import lombok.Data;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = "users")
+@Table(name = "operations")
 @Data
-public class User {
+public class Operation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,5 +16,8 @@ public class User {
 
     @Column(name = "name", nullable = false)
     private String name;
+
+    @Column(name = "description")
+    private String description;
 
 }

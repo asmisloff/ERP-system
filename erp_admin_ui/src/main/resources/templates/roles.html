@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <meta charset="utf-8"/>
+    <title>ERP System</title>
+
+    <th:block th:replace="fragments/navigation :: head/link"/>
+
+
+</head>
+<body>
+
+
+<div th:replace="fragments/navigation :: header"/>
+<div th:replace="fragments/navigation :: left_menu"/>
+
+
+
+<div class="main-container">
+    <div class="pd-ltr-20 xs-pd-20-10">
+        <div class="min-height-200px">
+
+            <!-- Bordered table  start -->
+            <div class="pd-20 card-box mb-30">
+                <div class="clearfix mb-20">
+                    <div class="pull-left">
+                        <h4 class="text-blue h4">USERS ROLES</h4>
+                    </div>
+                </div>
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Role</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>ROLE_ADMIN</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">2</th>
+                        <td>ROLE_CONSTRUCTOR</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">3</th>
+                        <td>ROLE_TECHNOLOGIST</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">4</th>
+                        <td>ROLE_PLANER</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">5</th>
+                        <td>ROLE_NORMALIZER</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- Bordered table End -->
+
+        </div>
+        <div class="footer-wrap pd-20 mb-20 card-box">
+            DeskApp - Bootstrap 4 Admin Template By <a href="https://github.com/dropways" target="_blank">Ankit Hingarajiya</a>
+        </div>
+    </div>
+</div>
+
+<!-- js -->
+<th:block th:replace="fragments/navigation :: body/script"/>
+
+</body>
+</html>

@@ -59,6 +59,7 @@
     <modules>
         <module>erp_database</module>
         <module>erp_admin_ui</module>
+        <module>file_storage_service</module>
     </modules>
 
 </project>

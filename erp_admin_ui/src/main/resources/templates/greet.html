@@ -1,11 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+
+<html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Greeting page</title>
+    <title>Макет главной страницы</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
-    <h3> Через месяц здесь будет вертеться приложение, которое покорит всю страну. Но не сразу. </h3>
-    <p> Пока что оно просто заводится, что уже неплохо. </p>
+    <h2> ERP система для машиностроительного предприятия </h2>
+    <h3> Спринт №3 </h3>
+    <ul> Работают основные функции файлового сервиса
+        <li>
+            <a th:href="@{/file_storage/upload}"> Загрузка чертежей в формате pdf на сервер </a>
+        </li>
+        <li> Генерация миниатюр страниц pdf-файла </li>
+        <li>
+            <a th:href="@{file_storage/list?pattern=*}"> Просмотр списка загруженных чертежей с фильтрацией по обозначению  </a>
+        </li>
+        <li>
+            <a th:href="@{file_storage/list?pattern=*}"> Выгрузка pdf с сервера </a>
+        </li>
+        <li>
+            <a th:href="@{file_storage/list?pattern=*}"> Удаление чертежей </a>
+        </li>
+    </ul>
 </body>
 </html>

@@ -45,6 +45,9 @@ public class FileController {
         if (!file.getContentType().equals("application/pdf")) {
             throw new FileUploadException("Illegal file type: " + file.getContentType());
         }
+        if (filename.isBlank()) {
+            throw new FileUploadException("Illegal filename -- blank string");
+        }
         try {
             Optional<Drawing> drawing = drawingService.findByFileName(filename);
             if (drawing.isPresent()) {

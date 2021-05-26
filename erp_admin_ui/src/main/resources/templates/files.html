@@ -24,9 +24,9 @@
                 <table class="table table-bordered">
                     <thead>
                     <tr>
-                        <th scope="col">*</th>
-                        <th scope="col">Drawing</th>
-                        <th scope="col">Action</th>
+                        <th scope="col" width="20%">Art</th>
+                        <th scope="col" width="80%" colspan="2">Drawing</th>
+                        <th scope="col" hidden width="5%">Action</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -38,32 +38,26 @@
                             </span>
                         </td>
                         <td>
-                            <div class="dropdown">
-                                <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-                                    <i class="dw dw-more"></i>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-<!--                                    <a class="dropdown-item" th:href="@{/file_storage/upload}"><i class="dw dw-edit2"></i> Add </a>-->
-                                    <a class="dropdown-item" th:href="@{/file_storage/delete(id=${drawing.id})}"><i class="dw dw-delete-3"></i> Delete </a>
-                                </div>
-                            </div>
+                            <form method="post" th:action="@{/file_storage/delete}">
+                                <input type="text" hidden name="id" th:value="${drawing.id}">
+                                <input
+                                        type="submit"  class="btn btn-danger" value="X" data-toggle="tooltip"
+                                        data-placement="right" title="Удалить чертеж"
+                                />
+                            </form>
                         </td>
                     </tr>
                     </tbody>
                 </table>
 
-                <form method="POST" enctype="multipart/form-data" action="/file_storage/upload">
+                <form method="POST" enctype="multipart/form-data" th:action="@{/file_storage/upload}">
                     <div class="form-group">
                         <label> Загрузить чертеж </label>
                         <input type="file" name="file" class="form-control-file form-control height-auto" />
-                        <label for="filename"> Обозначение: </label>
-                        <input type="text" name="filename" id="filename" />
-                        <input type="submit" value="Upload" />
+                        <input type="text" name="filename" id="filename" class="form-control" placeholder="Обозначение -- наименование"/>
+                        <input type="submit" value="Загрузить" class="btn btn-primary" />
                     </div>
                 </form>
-<!--                <div>-->
-<!--                    <a th:href="@{/file_storage/upload}" class="btn btn-primary"> <i class="icon-copy fi-plus"></i> Загрузить чертеж </a>-->
-<!--                </div>-->
             </div>
             <!-- Bordered table End -->
 

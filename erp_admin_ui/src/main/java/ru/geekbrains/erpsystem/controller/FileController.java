@@ -77,7 +77,7 @@ public class FileController {
         return data;
     }
 
-    @GetMapping("/delete")
+    @PostMapping("/delete")
     public String deleteFile(@RequestParam Long id, HttpServletRequest request) {
         try {
             Drawing drawing = drawingService.deleteDrawingAndThumbnails(id);

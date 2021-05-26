@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title>ERP System</title>
+    <th:block th:replace="fragments/navigation :: head/link"/>
+</head>
+<body>
+<div th:replace="fragments/navigation :: header"/>
+<div th:replace="fragments/navigation :: left_menu"/>
+
+<div class="main-container">
+    <div class="pd-ltr-20 xs-pd-20-10">
+        <div class="min-height-200px">
+
+            <!-- Bordered table  start -->
+            <div class="pd-20 card-box mb-30">
+                <div class="clearfix mb-20">
+                    <div class="pull-left">
+                        <h4 class="text-blue h4">Чертежи</h4>
+                    </div>
+                </div>
+
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th scope="col">*</th>
+                        <th scope="col">Drawing</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr id = "role_line" th:each="drawing : ${drawings}">
+                        <td id="drawing_art" th:text="${@drawingService.getFileName(drawing)}"/>
+                        <td id="role_thumbs">
+                            <span th:each="thumb : ${drawing.thumbnails}">
+                                <img th:src="@{/file_storage/thumb/{id}(id=${thumb.id})}" width="48%" />
+                            </span>
+                        </td>
+                        <td>
+                            <div class="dropdown">
+                                <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                                    <i class="dw dw-more"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+<!--                                    <a class="dropdown-item" th:href="@{/file_storage/upload}"><i class="dw dw-edit2"></i> Add </a>-->
+                                    <a class="dropdown-item" th:href="@{/file_storage/delete(id=${drawing.id})}"><i class="dw dw-delete-3"></i> Delete </a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <form method="POST" enctype="multipart/form-data" action="/file_storage/upload">
+                    <div class="form-group">
+                        <label> Загрузить чертеж </label>
+                        <input type="file" name="file" class="form-control-file form-control height-auto" />
+                        <label for="filename"> Обозначение: </label>
+                        <input type="text" name="filename" id="filename" />
+                        <input type="submit" value="Upload" />
+                    </div>
+                </form>
+<!--                <div>-->
+<!--                    <a th:href="@{/file_storage/upload}" class="btn btn-primary"> <i class="icon-copy fi-plus"></i> Загрузить чертеж </a>-->
+<!--                </div>-->
+            </div>
+            <!-- Bordered table End -->
+
+        </div>
+        <div class="footer-wrap pd-20 mb-20 card-box">
+            DeskApp - Bootstrap 4 Admin Template By <a href="https://github.com/dropways" target="_blank">Ankit Hingarajiya</a>
+        </div>
+    </div>
+</div>
+
+<!-- js -->
+<th:block th:replace="fragments/navigation :: body/script"/>
+
+</body>
+</html>

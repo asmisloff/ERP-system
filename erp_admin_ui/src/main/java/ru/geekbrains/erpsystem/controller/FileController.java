@@ -41,7 +41,9 @@ public class FileController {
     }
 
     @PostMapping("/upload")
-    public String uploadFile(@RequestParam("file") MultipartFile file, @RequestParam String filename) throws FileUploadException {
+    public String uploadFile(@RequestParam("file") MultipartFile file,
+                             @RequestParam String filename,
+                             HttpServletRequest request) throws FileUploadException {
         if (!file.getContentType().equals("application/pdf")) {
             throw new FileUploadException("Illegal file type: " + file.getContentType());
         }
@@ -59,7 +61,7 @@ public class FileController {
             e.printStackTrace();
             return "error";
         }
-        return "redirect:/";
+        return "redirect:" + request.getHeader("referer");
     }
 
     @GetMapping(value = "/download", produces = MediaType.APPLICATION_PDF_VALUE)
@@ -75,7 +77,7 @@ public class FileController {
         return data;
     }
 
-    @GetMapping("/delete") //todo: Заменить на PostMapping
+    @GetMapping("/delete")
     public String deleteFile(@RequestParam Long id, HttpServletRequest request) {
         try {
             Drawing drawing = drawingService.deleteDrawingAndThumbnails(id);
@@ -98,7 +100,7 @@ public class FileController {
         List<Drawing> drawings = drawingService.findAllByPathContaining(pattern);
         model.addAttribute("drawings", drawings);
         logger.info(drawings.stream().map(Drawing::getPath).collect(Collectors.toList()).toString());
-        return "list_of_files";
+        return "files";
     }
 
     @GetMapping("/thumb/{id}")

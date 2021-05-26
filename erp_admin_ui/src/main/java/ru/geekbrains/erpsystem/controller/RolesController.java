@@ -6,8 +6,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.geekbrains.erpsystem.data.RoleData;
 import ru.geekbrains.erpsystem.services.RoleService;
 
-import java.util.*;
-
 @Controller
 @RequestMapping("/roles")
 public class RolesController {

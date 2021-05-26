@@ -11,7 +11,6 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.InvalidMimeTypeException;
 
@@ -23,13 +22,16 @@ import java.io.IOException;
 public class S3Repository {
 
     private final Logger logger = LoggerFactory.getLogger(S3Repository.class);
-    @Value("${s3.access.key}") private String ACCESS_KEY;
-    @Value("${s3.secret.key}") private String SECRET_KEY;
-    @Value("${s3.bucket.name}") private String BUCKET_NAME;
+    private final String ACCESS_KEY = System.getenv("s3_access_key");
+    private final String SECRET_KEY = System.getenv("s3_secret_key");
+    private final String BUCKET_NAME = System.getenv("s3_bucket_name");
     private AmazonS3 s3client;
 
     @PostConstruct
     public void init() {
+        logger.info("access: " + ACCESS_KEY);
+        logger.info("secret: " + SECRET_KEY);
+        logger.info("bucket: " + BUCKET_NAME);
         AWSCredentials credentials = new BasicAWSCredentials(ACCESS_KEY, SECRET_KEY);
 
         s3client = AmazonS3ClientBuilder

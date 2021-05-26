@@ -28,36 +28,37 @@
                         <h4 class="text-blue h4">USERS ROLES</h4>
                     </div>
                 </div>
+
                 <table class="table table-bordered">
                     <thead>
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">Role</th>
+                        <th scope="col">Action</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>ROLE_ADMIN</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>ROLE_CONSTRUCTOR</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">3</th>
-                        <td>ROLE_TECHNOLOGIST</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">4</th>
-                        <td>ROLE_PLANER</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">5</th>
-                        <td>ROLE_NORMALIZER</td>
+                    <tr id = "role_line" th:each="role : ${roles}">
+                        <td id="role_id" th:text="${role.id}"/>
+                        <td id="role_name" th:text="${role.name}"/>
+                        <td>
+                            <div class="dropdown">
+                                <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                                    <i class="dw dw-more"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+                                    <a class="dropdown-item" th:href="@{'/roles/edit/'+${role.id}}"><i class="dw dw-edit2"></i> Edit</a>
+                                    <a class="dropdown-item" th:href="@{'/roles/delete/'+${role.id}}"><i class="dw dw-delete-3"></i> Delete</a>
+                                </div>
+                            </div>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
+
+                <div>
+                    <a th:href="@{/roles/add}" class="btn btn-primary"> <i class="icon-copy fi-plus"></i> Add new Role</a>
+                </div>
             </div>
             <!-- Bordered table End -->
 

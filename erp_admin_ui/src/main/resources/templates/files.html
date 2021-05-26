@@ -31,7 +31,10 @@
                     </thead>
                     <tbody>
                     <tr id = "role_line" th:each="drawing : ${drawings}">
-                        <td id="drawing_art" th:text="${@drawingService.getFileName(drawing)}"/>
+                        <td id="drawing_art">
+                            <a th:text="${@drawingService.getFileName(drawing)}"
+                               th:href="@{/file_storage/download(id=${drawing.id})}" />
+                        </td>
                         <td id="role_thumbs">
                             <span th:each="thumb : ${drawing.thumbnails}">
                                 <img th:src="@{/file_storage/thumb/{id}(id=${thumb.id})}" width="48%" />

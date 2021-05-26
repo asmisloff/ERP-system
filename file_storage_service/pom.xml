@@ -15,7 +15,7 @@
 
         <dependency>
             <groupId>com.amazonaws</groupId>
-            <artifactId>aws-java-sdk</artifactId>
+            <artifactId>aws-java-sdk-s3</artifactId>
             <version>1.11.1022</version>
         </dependency>
 
@@ -23,13 +23,6 @@
         <dependency>
             <groupId>org.apache.pdfbox</groupId>
             <artifactId>pdfbox</artifactId>
-            <version>2.0.23</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.apache.pdfbox/pdfbox-tools -->
-        <dependency>
-            <groupId>org.apache.pdfbox</groupId>
-            <artifactId>pdfbox-tools</artifactId>
             <version>2.0.23</version>
         </dependency>
 

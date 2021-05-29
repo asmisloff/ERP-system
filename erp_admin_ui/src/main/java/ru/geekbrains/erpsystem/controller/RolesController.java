@@ -31,7 +31,7 @@ public class RolesController {
             @PathVariable Long id,
             Model model
     ){
-        model.addAttribute("role_name", "Edit Role");
+        model.addAttribute("form_name", "Edit Role");
 
         RoleData roleData = roleService.getById(id)
                 .orElseThrow(()->new RuntimeException("Role with id - " + id + " not found"));
@@ -43,6 +43,7 @@ public class RolesController {
     public String addNewRole(
             Model model
     ){
+        model.addAttribute("form_name", "New Role");
         model.addAttribute("roleData",new RoleData());
         return "forms/role_form";
     }

@@ -1,8 +1,7 @@
 package ru.geekbrains.erpsystem;
 
-import org.jboss.logging.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import ru.geekbrains.erpsystem.entities.*;
 import ru.geekbrains.erpsystem.repositories.*;
 
@@ -10,7 +9,7 @@ import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Component
+//@Component
 public class SampleData {
 
     @Autowired private RoleRepository roleRepository;
@@ -24,7 +23,7 @@ public class SampleData {
     @Autowired private UnitRelationRepository unitRelationRepository;
     @Autowired private TicketRepository ticketRepository;
     @Autowired private UnitEntryRepository unitEntryRepository;
-    private Logger logger = Logger.getLogger(SampleData.class);
+    private org.slf4j.Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @PostConstruct
     public void populate() {
@@ -144,7 +143,7 @@ public class SampleData {
                 .stream()
                 .map(ue -> ue.getUnit().getName())
                 .collect(Collectors.toList());
-        logger.info(unitNames);
+        logger.info(unitNames.toString());
 
     }
 

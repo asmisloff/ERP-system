@@ -1,4 +1,4 @@
-package ru.geekbrains.controllers;
+package ru.geekbrains.erpsystem.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -6,13 +6,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/users")
-public class UserController {
+@RequestMapping("/dashboard")
+public class MainController {
 
-    @GetMapping("/all")
-    public String showAllUsers(
-            Model model
-    ){
-        return "users";
+    @GetMapping
+    public String indexPage(Model model){
+        return "index";
     }
 }

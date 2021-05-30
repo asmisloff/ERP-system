@@ -29,9 +29,6 @@ public class S3Repository {
 
     @PostConstruct
     public void init() {
-        logger.info("access: " + ACCESS_KEY);
-        logger.info("secret: " + SECRET_KEY);
-        logger.info("bucket: " + BUCKET_NAME);
         AWSCredentials credentials = new BasicAWSCredentials(ACCESS_KEY, SECRET_KEY);
 
         s3client = AmazonS3ClientBuilder

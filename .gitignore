@@ -38,3 +38,4 @@ build/
 heroku-local.bat
 test_data/
 /bfg-1.14.0.jar
+application-local.properties

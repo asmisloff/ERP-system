@@ -239,4 +239,13 @@
     <changeSet author="asmisloff (generated)" id="1622274097247-35">
         <addForeignKeyConstraint baseColumnNames="technologist" baseTableName="technology" constraintName="FKs3o52kcl5xqv06lyyhq0l1e9p" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="users" validate="true"/>
     </changeSet>
+
+    <changeSet author="asmisloff (generated)" id="1622475904779-1">
+        <addColumn tableName="users">
+            <column name="password" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

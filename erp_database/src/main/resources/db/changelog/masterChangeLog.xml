@@ -18,5 +18,10 @@
         <sqlFile path="01/insert_test_drawings_and_thumbs.sql" relativeToChangelogFile="true"/>
         <rollback/>
     </changeSet>
+
+    <changeSet id="0.3" author="asmisloff">
+        <sqlFile path="01/insert_admin_user.sql" relativeToChangelogFile="true"/>
+        <rollback/>
+    </changeSet>
     
 </databaseChangeLog>

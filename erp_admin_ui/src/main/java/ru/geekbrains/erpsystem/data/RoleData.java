@@ -4,12 +4,18 @@ package ru.geekbrains.erpsystem.data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import ru.geekbrains.erpsystem.entities.Role;
+
+import java.io.Serializable;
 
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
-public class RoleData {
+
+public class RoleData implements Serializable {
+
     private Long id;
     private String name;
 

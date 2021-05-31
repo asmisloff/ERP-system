@@ -38,9 +38,8 @@ public class Unit {
     @JoinColumn(name = "technology_id")
     private Technology technology;
 
-    /*todo:
-    *  Добавить поля для связи с файлами чертежей и миниатюр (thumbnails) листов.
-    * Чертежи будут храниться на Amazon S3.
-    */
+    @OneToOne
+    @JoinColumn(name = "drawing_id")
+    private Drawing drawing;
 
 }

@@ -1,5 +1,8 @@
 package ru.geekbrains.erpsystem.services.impl;
 
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.geekbrains.erpsystem.data.UserData;
 import ru.geekbrains.erpsystem.entities.Role;
@@ -22,7 +25,6 @@ public class UserServiceImpl implements UserService {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
     }
-
 
     @Override
     public UserData insert(UserData userData) {
@@ -76,4 +78,18 @@ public class UserServiceImpl implements UserService {
 
         return user;
     }
+
+    @Override
+    public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
+        User user = userRepository.findByName(name).orElse(null);
+        if (user == null) {
+            throw new UsernameNotFoundException(String.format("Username %s not found", name));
+        }
+        return new org.springframework.security.core.userdetails.User(
+                user.getName(),
+                user.getPassword(),
+                List.of(new SimpleGrantedAuthority(user.getRole().getName()))
+        );
+    }
+
 }

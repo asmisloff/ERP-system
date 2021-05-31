@@ -22,7 +22,7 @@ public class RoleServiceImpl implements RoleService {
     public RoleData insert(RoleData roleData) {
 
         if( roleData.getId() != null ){
-            throw new RuntimeException("Role with id - "+ roleData.getId() +"is not empty");
+            throw new RuntimeException("Role with id - "+ roleData.getId() +" is not empty");
         }
         return new RoleData(roleRepository.save(roleData.getRoleEntity()));
     }

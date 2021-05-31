@@ -1,28 +1,52 @@
 <!DOCTYPE html>
-
 <html xmlns:th="http://www.thymeleaf.org">
-
 <head>
-    <title>Макет главной страницы</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <meta charset="utf-8"/>
+    <title>ERP System</title>
+
+    <th:block th:replace="fragments/navigation :: head/link"/>
+
+
 </head>
 <body>
-    <h2> ERP система для машиностроительного предприятия </h2>
-    <h3> Спринт №3 </h3>
-    <ul> Работают основные функции файлового сервиса
-        <li>
-            <a th:href="@{/file_storage/upload}"> Загрузка чертежей в формате pdf на сервер </a>
-        </li>
-        <li> Генерация миниатюр страниц pdf-файла </li>
-        <li>
-            <a th:href="@{file_storage/list?pattern=*}"> Просмотр списка загруженных чертежей с фильтрацией по обозначению  </a>
-        </li>
-        <li>
-            <a th:href="@{file_storage/list?pattern=*}"> Выгрузка pdf с сервера </a>
-        </li>
-        <li>
-            <a th:href="@{file_storage/list?pattern=*}"> Удаление чертежей </a>
-        </li>
-    </ul>
+
+
+<div th:replace="fragments/navigation :: header"/>
+<div th:replace="fragments/navigation :: left_menu"/>
+
+
+
+<div class="main-container">
+
+    <div class="pd-ltr-20 xs-pd-20-10">
+        <div class="min-height-200px">
+
+            <div class="pd-20 card-box height-100-p">
+                <h3 class="mb-20 h4"> ERP система для машиностроительного предприятия </h3>
+                <h4 class="mb-20 h4"> На данный момент работает </h4>
+                <ul class="list-group">
+                    <li class="list-group-item"> Авторизация пользователей </li>
+                    <li class="list-group-item"> Роли пользователей: добавление, удаление, просмотр </li>
+                    <li class="list-group-item"> Пользователи: добавление, удаление, просмотр </li>
+                    <li class="list-group-item">
+                        <ul class="list-group"> Файловый сервис
+                            <li class="list-group-item"> Загрузка чертежей в pdf </li>
+                            <li class="list-group-item"> Генерация миниатюр листов </li>
+                            <li class="list-group-item"> Удаление чертежей и связанных с ними миниатюр </li>
+                            <li class="list-group-item"> Скачивание чертежей </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- js -->
+<th:block th:replace="fragments/navigation :: body/script"/>
+
 </body>
 </html>

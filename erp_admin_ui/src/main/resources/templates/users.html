@@ -31,31 +31,33 @@
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">Name</th>
-                        <th scope="col">Login</th>
-                        <th scope="col">Roles</th>
+                        <th scope="col">Role</th>
+                        <th scope="col">Action</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>Anna</td>
-                        <td>User 1</td>
-                        <td>ROLE_ADMIN</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Eva</td>
-                        <td>User 2</td>
-                        <td>ROLE_CONSTRUCTOR</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Filipp</td>
-                        <td>User 3</td>
-                        <td>ROLE_PLANER</td>
-                    </tr>
+                        <tr id = "user_line" th:each="user : ${users}">
+                            <td id="user_id" th:text="${user.id}"/>
+                            <td id="user_name" th:text="${user.name}"/>
+                            <td id="user_role" th:text="${user.roleData.name}"/>
+                            <td>
+                                <div class="dropdown">
+                                    <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                                        <i class="dw dw-more"></i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+                                        <a class="dropdown-item" th:href="@{'/users/edit/'+${user.id}}"><i class="dw dw-edit2"></i> Edit</a>
+                                        <a class="dropdown-item" th:href="@{'/users/delete/'+${user.id}}"><i class="dw dw-delete-3"></i> Delete</a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
+
+                <div>
+                    <a th:href="@{/users/add}" class="btn btn-primary"> <i class="icon-copy fi-plus"></i> Add new User</a>
+                </div>
             </div>
             <!-- Bordered table End -->
         </div>

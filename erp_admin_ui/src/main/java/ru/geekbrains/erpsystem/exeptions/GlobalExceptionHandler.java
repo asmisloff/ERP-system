@@ -19,14 +19,16 @@ public class GlobalExceptionHandler {
         m.addAttribute("message", e.getMessage());
         m.addAttribute("referer", request.getHeader("referer"));
         logger.error(e.getMessage());
+        e.printStackTrace();
         return "error";
     }
 
     @ExceptionHandler(MaxUploadSizeExceededException.class)
-    public String handleMaxUploadSizeExceededException(Exception e, Model m, HttpServletRequest request) {
+    public String handleMaxUploadSizeExceededException(MaxUploadSizeExceededException e, Model m, HttpServletRequest request) {
         m.addAttribute("message", "Файл слишком велик. Нельзя загрузить больше 1 МБ");
         m.addAttribute("referer", request.getHeader("referer"));
         logger.error(e.getMessage());
+        e.printStackTrace();
         return "error";
     }
 

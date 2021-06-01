@@ -38,7 +38,7 @@ public class UserController {
         model.addAttribute("userData", userData);
 
         model.addAttribute("allRoles", roleService.getAll() );
-        return "forms/user_form";
+        return "forms/edit_user_form";
     }
 
     @GetMapping("/add")
@@ -47,7 +47,7 @@ public class UserController {
     ){
         model.addAttribute("userData",new UserData());
         model.addAttribute("allRoles", roleService.getAll() );
-        return  "forms/user_form";
+        return  "forms/add_user_form";
     }
 
     @PostMapping("/add")

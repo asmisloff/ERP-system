@@ -56,8 +56,8 @@
                 <form method="POST" enctype="multipart/form-data" th:action="@{/file_storage/upload}">
                     <div class="form-group">
                         <label> Загрузить чертеж </label>
-                        <input type="file" name="file" class="form-control-file form-control height-auto" />
-                        <input type="text" name="filename" id="filename" class="form-control" placeholder="Обозначение -- наименование"/>
+                        <input type="file" name="file" class="form-control-file form-control height-auto" id="file_input" onchange="getFileName();" />
+                        <input type="text" name="filename" class="form-control" placeholder="Обозначение -- наименование" id="filename_input"/>
                         <input type="submit" value="Загрузить" class="btn btn-primary" />
                     </div>
                 </form>
@@ -73,6 +73,13 @@
 
 <!-- js -->
 <th:block th:replace="fragments/navigation :: body/script"/>
+
+<script type="text/javascript">
+function getFileName() {
+    var filename = document.getElementById("file_input").value.split("\\").pop().split(".")[0];
+    document.getElementById("filename_input").value = filename;
+}
+</script>
 
 </body>
 </html>

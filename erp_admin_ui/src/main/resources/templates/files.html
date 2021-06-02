@@ -13,7 +13,6 @@
     <div class="pd-ltr-20 xs-pd-20-10">
         <div class="min-height-200px">
 
-            <!-- Bordered table  start -->
             <div class="pd-20 card-box mb-30">
                 <div class="clearfix mb-20">
                     <div class="pull-left">
@@ -21,37 +20,32 @@
                     </div>
                 </div>
 
-                <table class="table table-bordered">
-                    <thead>
-                    <tr>
-                        <th scope="col" width="20%">Art</th>
-                        <th scope="col" width="80%" colspan="2">Drawing</th>
-                        <th scope="col" hidden width="5%">Action</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr id = "role_line" th:each="drawing : ${drawings}">
-                        <td id="drawing_art">
-                            <a th:text="${@drawingService.getFileName(drawing)}"
-                               th:href="@{/file_storage/download(id=${drawing.id})}" />
-                        </td>
-                        <td id="role_thumbs">
-                            <span th:each="thumb : ${drawing.thumbnails}">
-                                <img th:src="@{/file_storage/thumb/{id}(id=${thumb.id})}" width="48%" />
-                            </span>
-                        </td>
-                        <td>
-                            <form method="post" th:action="@{/file_storage/delete}">
+                <div id="accordion">
+
+                    <div class="card" th:each="drawing : ${drawings}">
+                        <div class="card-header">
+                            <a th:href="@{/file_storage/download(id=${drawing.id})}"><i class="icon-copy dw dw-download2"></i></a>
+                            <button class="btn btn-block collapsed"data-toggle="collapse"
+                                    th:attr="data-target='#faq' + ${drawing.id}" aria-expanded="false" th:text="${@drawingService.getFileName(drawing)}">
+                                Collapsible Group Item #1
+                            </button>
+                            <form method="post" th:action="@{/file_storage/delete}" th:id="${drawing.id} + '_delete_form'">
                                 <input type="text" hidden name="id" th:value="${drawing.id}">
-                                <input
-                                        type="submit"  class="btn btn-danger" value="X" data-toggle="tooltip"
-                                        data-placement="right" title="Удалить чертеж"
-                                />
+<!--                                <input type="submit"  class="fa fa-trash" value="X" data-toggle="tooltip"-->
+<!--                                       data-placement="right" title="Удалить чертеж" />-->
                             </form>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+                            <a href="#" th:onclick="'submit_form(\'' + ${drawing.id} + '_delete_form\'); return false;'"><i class="icon-copy dw dw-delete-3"></i></a>
+                        </div>
+                        <div th:id="'faq' + ${drawing.id}" class="collapse" data-parent="#accordion" style="">
+                            <div class="card-body">
+                                <span th:each="thumb : ${drawing.thumbnails}">
+                                    <img th:src="@{'/file_storage/thumb/' + ${thumb.id}}" width="48%"/>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
 
                 <form method="POST" enctype="multipart/form-data" th:action="@{/file_storage/upload}">
                     <div class="form-group">
@@ -61,13 +55,11 @@
                         <input type="submit" value="Загрузить" class="btn btn-primary" />
                     </div>
                 </form>
+
             </div>
-            <!-- Bordered table End -->
 
         </div>
-        <div class="footer-wrap pd-20 mb-20 card-box">
-            DeskApp - Bootstrap 4 Admin Template By <a href="https://github.com/dropways" target="_blank">Ankit Hingarajiya</a>
-        </div>
+
     </div>
 </div>
 
@@ -78,6 +70,11 @@
 function getFileName() {
     var filename = document.getElementById("file_input").value.split("\\").pop().split(".")[0];
     document.getElementById("filename_input").value = filename;
+}
+
+function submit_form(form_id) {
+    var form = document.getElementById(form_id);
+    form.submit();
 }
 </script>
 

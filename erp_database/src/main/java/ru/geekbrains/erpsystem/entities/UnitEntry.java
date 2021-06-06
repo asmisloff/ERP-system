@@ -10,7 +10,7 @@ import javax.persistence.*;
 public class UnitEntry {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id")
     protected Long id;
 

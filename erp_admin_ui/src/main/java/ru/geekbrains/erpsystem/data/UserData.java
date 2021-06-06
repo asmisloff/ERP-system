@@ -16,12 +16,14 @@ public class UserData implements Serializable {
     private Long id;
     private String name;
     private RoleData roleData;
+    private String password;
 
 
     public UserData(User user){
         this.id = user.getId();
         this.name = user.getName();
         this.roleData = new RoleData(user.getRole());
+        this.password = user.getPassword();
     }
 
     public User getRoleEntity() {

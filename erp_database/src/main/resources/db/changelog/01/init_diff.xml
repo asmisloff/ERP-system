@@ -248,4 +248,8 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="1622475904779-" author="jhipster" dbms="postgresql">
+        <createSequence sequenceName="hibernate_sequence" startValue="20000" incrementBy="1"/>
+    </changeSet>
+
 </databaseChangeLog>

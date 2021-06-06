@@ -3,6 +3,7 @@ package ru.geekbrains.erpsystem.services.impl;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.geekbrains.erpsystem.data.UserData;
 import ru.geekbrains.erpsystem.entities.Role;
@@ -20,10 +21,12 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -33,17 +36,20 @@ public class UserServiceImpl implements UserService {
         }
 
         User user = dataToEntity(userData);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         return new UserData( userRepository.save(user) );
     }
 
     @Override
     public UserData update(UserData userData) {
-        if ( userRepository.findById( userData.getId()).isEmpty() ){
+        User existingUser = userRepository.findById( userData.getId()).orElse(null);
+        if (existingUser == null){
             throw new RuntimeException("User with id - "+userData.getId() + "is empty");
         }
 
         User user  = dataToEntity(userData);
+        user.setPassword(existingUser.getPassword());
 
         return new UserData( userRepository.save(user) );
     }
@@ -75,6 +81,7 @@ public class UserServiceImpl implements UserService {
         user.setId(userData.getId());
         user.setName(userData.getName());
         user.setRole(role);
+        user.setPassword(userData.getPassword());
 
         return user;
     }

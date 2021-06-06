@@ -8,8 +8,6 @@ import ru.geekbrains.erpsystem.entities.DrawingThumbnail;
 import ru.geekbrains.erpsystem.repositories.DrawingRepository;
 import ru.geekbrains.erpsystem.repositories.DrawingThumbnailRepository;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -48,7 +46,7 @@ public class DrawingService {
 
     public Drawing findById(Long id) throws NotFoundException {
         return drawingRepository.findById(id).orElseThrow(
-                () -> new NotFoundException(String.format("Drawing id = %s not found in db", id))
+                () -> new NotFoundException(String.format("Чертеж с id = %s не найден в базе данных", id))
         );
     }
 

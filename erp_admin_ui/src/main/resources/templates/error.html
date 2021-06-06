@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <meta charset="utf-8"/>
+    <title>ERP System: error</title>
+
+    <th:block th:replace="fragments/navigation :: head/link"/>
+
+
+</head>
+<body>
+
+
+<div th:replace="fragments/navigation :: header"/>
+<div th:replace="fragments/navigation :: left_menu"/>
+
+
+
+<div class="main-container">
+
+    <div class="pd-ltr-20 xs-pd-20-10">
+        <div class="min-height-200px">
+
+            <h2> Ошибка </h2>
+            <p th:text="${message}" />
+            <a th:href="${referer}"> Вернуться назад </a>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- js -->
+<th:block th:replace="fragments/navigation :: body/script"/>
+
+</body>
+</html>

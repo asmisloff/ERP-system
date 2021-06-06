@@ -35,63 +35,47 @@ public class FileController {
     @Autowired
     private DrawingService drawingService;
 
-    @GetMapping("/upload")
-    public String showFileUploadForm() {
-        return "file_upload_form";
-    }
-
     @PostMapping("/upload")
     public String uploadFile(@RequestParam("file") MultipartFile file,
                              @RequestParam String filename,
-                             HttpServletRequest request) throws FileUploadException {
+                             HttpServletRequest request) throws IOException {
+        if (file.getSize() == 0) {
+            throw new FileUploadException("Файл не выбран или пустой");
+        }
         if (!file.getContentType().equals("application/pdf")) {
-            throw new FileUploadException("Illegal file type: " + file.getContentType());
+            throw new FileUploadException("Неверный тип файла: " + file.getContentType());
         }
         if (filename.isBlank()) {
-            throw new FileUploadException("Illegal filename -- blank string");
+            throw new FileUploadException("Неверное имя файла (пустая строка)");
         }
-        try {
-            Optional<Drawing> drawing = drawingService.findByFileName(filename);
-            if (drawing.isPresent()) {
-                return "duplicate_drawing";
-            }
-            Pair<String, List<String>> keys = fileStorageService.uploadDrawing(file, filename);
-            drawingService.saveDrawing(keys.getFirst(), keys.getSecond());
-        } catch (IOException e) {
-            e.printStackTrace();
-            return "error";
+        Optional<Drawing> drawing = drawingService.findByFileName(filename);
+        if (drawing.isPresent()) {
+            throw new FileUploadException(String.format("Чертеж %s уже загружен в хранилище. Перед загрузкой необходимо удалить существующий чертеж.", filename));
         }
+        Pair<String, List<String>> keys = fileStorageService.uploadDrawing(file, filename);
+        drawingService.saveDrawing(keys.getFirst(), keys.getSecond());
         return "redirect:" + request.getHeader("referer");
     }
 
     @GetMapping(value = "/download", produces = MediaType.APPLICATION_PDF_VALUE)
-    public @ResponseBody byte[] downloadFile(@RequestParam("id") Long id) {
-        byte[] data = null;
-        try {
-            Drawing drawing = drawingService.findById(id);
-            String path = drawing.getPath();
-            data = fileStorageService.downloadDrawing(path);
-        } catch (IOException | NotFoundException e) {
-            e.printStackTrace();
-        }
+    public @ResponseBody byte[] downloadFile(@RequestParam("id") Long id) throws NotFoundException, IOException {
+        byte[] data;
+        Drawing drawing = drawingService.findById(id);
+        String path = drawing.getPath();
+        data = fileStorageService.downloadDrawing(path);
         return data;
     }
 
     @PostMapping("/delete")
-    public String deleteFile(@RequestParam Long id, HttpServletRequest request) {
-        try {
-            Drawing drawing = drawingService.deleteDrawingAndThumbnails(id);
+    public String deleteFile(@RequestParam Long id, HttpServletRequest request) throws NotFoundException, FileNotFoundException {
+        Drawing drawing = drawingService.deleteDrawingAndThumbnails(id);
 
-            String pdfKey = drawing.getPath();
-            List<String> thumbKeys = drawing.getThumbnails().stream()
-                    .map(DrawingThumbnail::getPath)
-                    .collect(Collectors.toList());
+        String pdfKey = drawing.getPath();
+        List<String> thumbKeys = drawing.getThumbnails().stream()
+                .map(DrawingThumbnail::getPath)
+                .collect(Collectors.toList());
 
-            fileStorageService.deleteDrawing(pdfKey, thumbKeys);
-        } catch (FileNotFoundException | NotFoundException e) {
-            e.printStackTrace();
-            return "error";
-        }
+        fileStorageService.deleteDrawing(pdfKey, thumbKeys);
         return "redirect:" + request.getHeader("referer");
     }
 

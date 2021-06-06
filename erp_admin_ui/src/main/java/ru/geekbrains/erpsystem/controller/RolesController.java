@@ -25,7 +25,7 @@ public class RolesController {
     }
 
     @GetMapping("/edit/{id}")
-    public String getRoleById(
+    public String editRole(
             @PathVariable Long id,
             Model model
     ){

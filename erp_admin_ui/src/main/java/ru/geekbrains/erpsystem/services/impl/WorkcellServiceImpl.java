@@ -18,23 +18,40 @@ public class WorkcellServiceImpl implements WorkcellService {
     private WorkcellRepository workcellRepository;
 
     @Override
-    public WorkcellData insert(WorkcellData var1) {
-        throw new RuntimeException("Not implemented");
+    public WorkcellData insert(WorkcellData workcellData) {
+        if (workcellData.getId() != null) {
+            throw new RuntimeException(
+                    String.format(
+                            "Ошибка сохранения в БД. Workcell с id = %d существует", workcellData.getId())
+            );
+        }
+        return new WorkcellData(
+                workcellRepository.save(workcellData.getEntity())
+        );
     }
 
     @Override
-    public WorkcellData update(WorkcellData var1) {
-        throw new RuntimeException("Not implemented");
+    public WorkcellData update(WorkcellData workcellData) {
+        Optional<Workcell> workcell = workcellRepository.findById(workcellData.getId());
+        if (workcell.isEmpty()) {
+            throw new RuntimeException(
+                    String.format(
+                            "Ошибка обновления записи в БД. Workcell с id = %d не существует.", workcellData.getId())
+            );
+        }
+        return new WorkcellData(
+                workcellRepository.save(workcellData.getEntity())
+        );
     }
 
     @Override
-    public void delete(Long var1) {
-        throw new RuntimeException("Not implemented");
+    public void delete(Long id) {
+        workcellRepository.deleteById(id);
     }
 
     @Override
-    public Optional<WorkcellData> getById(Long var1) {
-        throw new RuntimeException("Not implemented");
+    public Optional<WorkcellData> getById(Long id) {
+        return workcellRepository.findById(id).map(WorkcellData::new);
     }
 
     @Override
@@ -48,6 +65,5 @@ public class WorkcellServiceImpl implements WorkcellService {
     public Optional<Workcell> getByName(String name) {
         return workcellRepository.findByName(name);
     }
-
 
 }

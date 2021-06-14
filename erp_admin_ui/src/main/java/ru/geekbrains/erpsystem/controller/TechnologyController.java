@@ -8,8 +8,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import ru.geekbrains.erpsystem.data.OperationEntryData;
+import ru.geekbrains.erpsystem.data.TechnologyData;
+import ru.geekbrains.erpsystem.exeptions.NotFoundException;
 import ru.geekbrains.erpsystem.services.TechnologyService;
 import ru.geekbrains.erpsystem.services.UserService;
+
+import java.util.Comparator;
 
 @Controller
 @RequestMapping("/technologies")
@@ -46,10 +51,22 @@ public class TechnologyController {
         return "forms/edit_technology_form";
     }
 
+    @GetMapping("schedule/{id}")
+    public String showSchedulePage(@PathVariable("id") Long id, Model m) {
+        TechnologyData td = technologyService.getById(id).orElseThrow(
+                () -> new NotFoundException(String.format("Технология с id = %d не найдена", id))
+        );
+
+        td.getOpEntries().sort(Comparator.comparingInt(OperationEntryData::getTurn));
+        m.addAttribute("technology", td);
+        m.addAttribute("applicationUrl", applicationUrl);
+        return "forms/schedule_technology_form";
+    }
+
     @GetMapping("/delete/{id}")
     public String deleteTechnologyPage(@PathVariable("id") Long id) {
         technologyService.delete(id);
-        return  "redirect:/technologies/all";
+        return "redirect:/technologies/all";
     }
 
 }

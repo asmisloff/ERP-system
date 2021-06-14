@@ -1,9 +1,5 @@
 package ru.geekbrains.erpsystem.services.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.geekbrains.erpsystem.data.OperationEntryData;
@@ -15,12 +11,13 @@ import ru.geekbrains.erpsystem.repositories.OperationEntryRepository;
 import ru.geekbrains.erpsystem.repositories.TechnologyRepository;
 import ru.geekbrains.erpsystem.repositories.UserRepository;
 import ru.geekbrains.erpsystem.services.OperationEntryService;
-import ru.geekbrains.erpsystem.services.OperationService;
 import ru.geekbrains.erpsystem.services.TechnologyService;
-import ru.geekbrains.erpsystem.services.WorkcellService;
 
 import javax.transaction.Transactional;
-import java.util.*;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,54 +30,78 @@ public class TechnologyServiceImpl implements TechnologyService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private WorkcellService workcellService;
-    @Autowired
-    private OperationService operationService;
-    @Autowired
     OperationEntryRepository operationEntryRepository;
-
-    private final ObjectMapper mapper = new ObjectMapper();
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Override
     @Transactional
     public TechnologyData insert(TechnologyData data) {
-        Technology t = new Technology();
+        if (data.getId() != null) {
+            data.setId(null);
+        }
+        Technology persistedTechnology = persistTechnologyData(data, new Technology());
+        data.setId(persistedTechnology.getId());
+        data.getOpEntries().forEach(oe -> {
+            oe.setTechnologyId(persistedTechnology.getId());
+            oe.setId(null);
+        });
+        operationEntryService.insertOrUpdateAll(data.getOpEntries());
+
+        return data;
+    }
+
+    private Technology persistTechnologyData(TechnologyData data, Technology t) {
         t.setId(data.getId());
         t.setTechnologist(userRepository.findById(data.getTechnologistId()).orElseThrow(
                 () -> new NotFoundException("Не найден технолог с id = " + data.getTechnologistId())
         ));
+        return technologyRepository.save(t);
+    }
 
-        Technology persistedTechnology = technologyRepository.save(t);
-        TechnologyData persistedTechnologyData = new TechnologyData(persistedTechnology);
+    @Override
+    public TechnologyData update(TechnologyData data) {
+        Long technologyId = data.getId();
+        if (technologyId == null) {
+            throw new IllegalArgumentException("TechnologyService::update -- попытка обновить технологию без id");
+        }
 
-        List<OperationEntry> opEnts = data.getOpEntries().stream()
-                .map(dto -> createOpEntryFromOpEntryData(dto, persistedTechnology))
-                .collect(Collectors.toList());
+        Technology t = technologyRepository.findById(technologyId).orElseThrow(
+                () -> new NotFoundException(
+                        String.format("TechnologyService::update -- технология с id = %d отсутствует в БД", technologyId)
+                )
+        );
 
-        /*
-            Удалить OperationEntities, присутствующие в базе, но удаленные пользователем в ходе последнего редактирования технологии.
-            todo: сделать удаление sql-запросом
-         */
-        List<Long> ids = opEnts.stream().map(OperationEntry::getId).collect(Collectors.toList());
-        List<OperationEntry> neglectedOpEnts = operationEntryRepository
-                .findAllByTechnologyId(persistedTechnology.getId())
+        if (!t.getTechnologist().getId().equals(data.getTechnologistId())) { //если технолог не изменился, обновлять нечего
+            persistTechnologyData(data, t);
+        }
+
+        List<OperationEntry> persistedOpEntries = operationEntryRepository.findAllByTechnologyId(technologyId);
+
+        //Удалить OperationEntities, присутствующие в базе, но удаленные пользователем в ходе последнего редактирования технологии.
+        List<Long> ids = data.getOpEntries().stream().map(OperationEntryData::getId).collect(Collectors.toList());
+        List<OperationEntry> neglectedOpEnts = persistedOpEntries
                 .stream()
                 .filter(e -> !ids.contains(e.getId()))
                 .collect(Collectors.toList());
         operationEntryRepository.deleteAll(neglectedOpEnts);
 
-        List<OperationEntryData> persistedOpEntDatas = operationEntryRepository.saveAll(opEnts)
-                .stream().map(OperationEntryData::new).collect(Collectors.toUnmodifiableList());
+        //Если технолог редактирует и обновляет технологию, у плановика не должны обнуляться нормочасы и даты
+        persistedOpEntries.sort(Comparator.comparingLong(OperationEntry::getId));
+        List<Long> persistedIds = persistedOpEntries.stream().map(OperationEntry::getId).collect(Collectors.toUnmodifiableList());
+        for (OperationEntryData oed : data.getOpEntries()) {
+            if (oed.getStartDateTime() != null) {
+                continue;
+            }
+            int i = Collections.binarySearch(persistedIds, oed.getId());
+            if (i >= 0) {
+                oed.setDuration(persistedOpEntries.get(i).getDuration());
+                oed.setStartDateTime(persistedOpEntries.get(i).getStartDateTime());
+                oed.setFinishDateTime(persistedOpEntries.get(i).getFinishDateTime());
+            }
+        }
 
-        persistedTechnologyData.setOpEntries(persistedOpEntDatas);
+        operationEntryService.insertOrUpdateAll(data.getOpEntries());
 
-        return persistedTechnologyData;
-    }
-
-    @Override
-    public TechnologyData update(TechnologyData data) {
-        throw new RuntimeException("Not implemented -- TechnologyServiceImpl::update");
+        return data;
     }
 
     @Override
@@ -100,31 +121,6 @@ public class TechnologyServiceImpl implements TechnologyService {
         return technologyRepository.findAll().stream()
                 .map(TechnologyData::new)
                 .collect(Collectors.toUnmodifiableList());
-    }
-
-    private OperationEntry createOpEntryFromOpEntryData(OperationEntryData data, Technology t) {
-        OperationEntry oe = new OperationEntry();
-        oe.setId(data.getId());
-        oe.setWorkcell(workcellService.getByName(data.getWorkcell()).orElseThrow(
-                () -> new NotFoundException(String.format("Не найден участок '%s'", data.getWorkcell()))
-        ));
-        oe.setOperation(operationService.getByName(data.getOpName()).orElseThrow(
-                () -> new NotFoundException(String.format("Не найдена операция '%s'", data.getOpName()))
-        ));
-        oe.setTechnology(t);
-        try {
-            oe.setParams(mapper.writeValueAsString(data.getParams()));
-        } catch (JsonProcessingException e) {
-            logger.error("Не удалось разобрать параметры операции: " + data.getParams());
-            e.printStackTrace();
-            oe.setParams("");
-        }
-        oe.setQty(data.getQty());
-        oe.setTurn(data.getTurn());
-        oe.setDuration(data.getDuration());
-        oe.setStartDateTime(data.getStartDateTime());
-
-        return oe;
     }
 
 }

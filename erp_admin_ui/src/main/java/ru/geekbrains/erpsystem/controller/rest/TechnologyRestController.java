@@ -39,7 +39,12 @@ public class TechnologyRestController {
     @PostMapping("/post")
     public TechnologyData post(@RequestBody TechnologyData data) {
         logger.info("Получены данные: " + data.toString());
-        TechnologyData response = technologyService.insert(data);
+        TechnologyData response;
+        if (data.getId() == null) {
+            response = technologyService.insert(data);
+        } else {
+            response = technologyService.update(data);
+        }
         logger.info("Response object: " + response.toString());
         return response;
     }

@@ -24,4 +24,10 @@
     <changeSet author="asmisloff (generated)" id="1623232108932-7">
         <dropTable tableName="agenda"/>
     </changeSet>
+
+    <changeSet author="asmisloff (generated)" id="1623232108932-8">
+        <addColumn tableName="operation_entries">
+            <column name="finish_date_time" type="timestamp"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

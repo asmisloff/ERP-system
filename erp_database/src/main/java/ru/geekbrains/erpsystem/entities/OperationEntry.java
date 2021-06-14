@@ -42,4 +42,7 @@ public class OperationEntry {
     @Column(name = "start_date_time")
     private LocalDateTime startDateTime;
 
+    @Column(name = "finish_date_time")
+    private LocalDateTime finishDateTime;
+
 }

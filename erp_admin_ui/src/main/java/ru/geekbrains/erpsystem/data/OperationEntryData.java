@@ -28,6 +28,7 @@ public class OperationEntryData {
     private float duration;
     private Integer qty;
     private LocalDateTime startDateTime;
+    private LocalDateTime finishDateTime;
 
     private static ObjectMapper mapper = new ObjectMapper();
 
@@ -48,6 +49,7 @@ public class OperationEntryData {
         duration = oe.getDuration();
         qty = oe.getQty();
         startDateTime = oe.getStartDateTime();
+        finishDateTime = oe.getFinishDateTime();
     }
 
 }

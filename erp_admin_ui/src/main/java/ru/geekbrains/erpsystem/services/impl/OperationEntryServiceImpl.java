@@ -39,6 +39,7 @@ public class OperationEntryServiceImpl implements OperationEntryService {
         OperationEntry oe = new OperationEntry();
         oe.setId(null);
         oe.setStartDateTime(data.getStartDateTime());
+        oe.setFinishDateTime(data.getFinishDateTime());
         oe.setDuration(data.getDuration());
         oe.setQty(data.getQty());
         oe.setTurn(data.getTurn());

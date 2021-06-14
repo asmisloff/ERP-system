@@ -84,11 +84,14 @@ public class TechnologyServiceImpl implements TechnologyService {
                 .collect(Collectors.toList());
         operationEntryRepository.deleteAll(neglectedOpEnts);
 
-        //Если технолог редактирует и обновляет технологию, у плановика не должны обнуляться нормочасы и даты
+        /* Если технолог редактирует и обновляет технологию, у плановика не должны обнуляться нормочасы и даты.
+        * todo: сделать 2 отдельных метода обновления: для технолога и для плановика.
+        *  Плановик перезаписывает даты,технолог - нет.
+        *  */
         persistedOpEntries.sort(Comparator.comparingLong(OperationEntry::getId));
         List<Long> persistedIds = persistedOpEntries.stream().map(OperationEntry::getId).collect(Collectors.toUnmodifiableList());
         for (OperationEntryData oed : data.getOpEntries()) {
-            if (oed.getStartDateTime() != null) {
+            if (oed.getStartDateTime() != null || oed.getId() == null) {
                 continue;
             }
             int i = Collections.binarySearch(persistedIds, oed.getId());

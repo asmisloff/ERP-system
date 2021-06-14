@@ -13,7 +13,6 @@ import ru.geekbrains.erpsystem.repositories.OperationEntryRepository;
 import ru.geekbrains.erpsystem.repositories.TechnologyRepository;
 import ru.geekbrains.erpsystem.services.OperationEntryService;
 import ru.geekbrains.erpsystem.services.OperationService;
-import ru.geekbrains.erpsystem.services.TechnologyService;
 import ru.geekbrains.erpsystem.services.WorkcellService;
 
 import java.util.List;
@@ -33,11 +32,27 @@ public class OperationEntryServiceImpl implements OperationEntryService {
     private TechnologyRepository technologyRepository;
 
     private final ObjectMapper mapper = new ObjectMapper();
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Override
     public OperationEntryData insert(OperationEntryData data) throws NotFoundException {
+        return new OperationEntryData(operationEntryRepository.save(toEntity(data)));
+    }
+
+    @Override
+    public List<OperationEntryData> insertOrUpdateAll(List<OperationEntryData> datas) throws NotFoundException {
+        List<OperationEntry> opEntries = datas.stream()
+                .map(this::toEntity)
+                .collect(Collectors.toUnmodifiableList());
+        return operationEntryRepository.saveAll(opEntries).stream()
+                .map(OperationEntryData::new)
+                .collect(Collectors.toUnmodifiableList());
+    }
+
+    @Override
+    public OperationEntry toEntity(OperationEntryData data) {
         OperationEntry oe = new OperationEntry();
-        oe.setId(null);
+        oe.setId(data.getId());
         oe.setStartDateTime(data.getStartDateTime());
         oe.setFinishDateTime(data.getFinishDateTime());
         oe.setDuration(data.getDuration());
@@ -57,11 +72,12 @@ public class OperationEntryServiceImpl implements OperationEntryService {
         try {
             oe.setParams(mapper.writeValueAsString(data.getParams()));
         } catch (JsonProcessingException e) {
+            logger.error("Не удалось разобрать параметры операции: " + data.getParams());
             e.printStackTrace();
             oe.setParams("");
         }
 
-        return new OperationEntryData(operationEntryRepository.save(oe));
+        return oe;
     }
 
     @Override

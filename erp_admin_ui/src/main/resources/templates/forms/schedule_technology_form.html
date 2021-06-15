@@ -32,7 +32,7 @@
                         <tr>
                             <th>Производственный участок</th>
                             <th>Технологическая операция</th>
-                            <th>Параметры операции</th>
+<!--                            <th>Параметры операции</th>-->
                             <th>Кол.</th>
                             <th>Норма времени, ч</th>
                             <th>Плановый старт работ</th>
@@ -42,17 +42,17 @@
                             <td style="width: 20%;">
                                 <input class="form-control workcell-input" th:value="${opEntry.workcell}" readonly/>
                             </td>
-                            <td style="width: 20%;">
+                            <td style="width: 30%;">
                                 <input class="form-control operation-input" th:value="${opEntry.opName}" readonly/>
                             </td>
-                            <td style="width: 20%;">
-                                <input class="form-control params-input" th:value="${opEntry.params}" readonly/>
-                            </td>
-                            <td style="width: 5%;">
+<!--                            <td style="width: 20%;">-->
+<!--                                <input class="form-control params-input" th:value="${opEntry.params}" readonly/>-->
+<!--                            </td>-->
+                            <td style="width: 10%;">
                                 <input class="form-control qty-input" th:value="${opEntry.qty}" readonly/>
                             </td>
-                            <td style="width: 5%; ">
-                                <input type='number' min='1' class="form-control duration-input " th:value="${opEntry.duration} " />
+                            <td style="width: 10%; ">
+                                <input type='number' min='1' class="form-control duration-input " th:value="${opEntry.duration}" readonly />
                             </td>
                             <td style="width: 15%; ">
                                 <input type='datetime-local' class="form-control start-datetime-input " th:value="${opEntry.startDateTime} " />

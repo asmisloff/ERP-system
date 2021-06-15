@@ -76,7 +76,7 @@ body {
 
 .op-param-container {
     overflow-y: scroll;
-    height: 165px;
+    height: 130px;
     font-size: 13px;
     font-style: italic;
 }

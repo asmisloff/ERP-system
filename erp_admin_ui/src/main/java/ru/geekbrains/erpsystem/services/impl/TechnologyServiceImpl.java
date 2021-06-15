@@ -84,7 +84,7 @@ public class TechnologyServiceImpl implements TechnologyService {
                 .collect(Collectors.toList());
         operationEntryRepository.deleteAll(neglectedOpEnts);
 
-        /* Если технолог редактирует и обновляет технологию, у плановика не должны обнуляться нормочасы и даты.
+        /* Если технолог редактирует и обновляет технологию, у плановика не должны обнуляться даты.
         * todo: сделать 2 отдельных метода обновления: для технолога и для плановика.
         *  Плановик перезаписывает даты,технолог - нет.
         *  */
@@ -96,7 +96,6 @@ public class TechnologyServiceImpl implements TechnologyService {
             }
             int i = Collections.binarySearch(persistedIds, oed.getId());
             if (i >= 0) {
-                oed.setDuration(persistedOpEntries.get(i).getDuration());
                 oed.setStartDateTime(persistedOpEntries.get(i).getStartDateTime());
                 oed.setFinishDateTime(persistedOpEntries.get(i).getFinishDateTime());
             }

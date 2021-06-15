@@ -14,13 +14,13 @@ $(function() {
     };
 
     _runEffect = function() {
-        runEffect();
-        return false;
-    }
-//    $("#button-save").on("click", function() {
-//        runEffect();
-//        return false;
-//    });
+            runEffect();
+            return false;
+        }
+        //    $("#button-save").on("click", function() {
+        //        runEffect();
+        //        return false;
+        //    });
 });
 
 counter = new class {
@@ -43,12 +43,13 @@ class OpEntry {
     static WORKCELLS;
     static OPERATIONS;
 
-    constructor(dbId, workcell, opName, qty, turn, params) {
+    constructor(dbId, workcell, opName, qty, duration, turn, params) {
         this.technologyId = document.getElementById("sortable").getAttribute("technology-id");
         this.id = dbId;
         this.workcell = workcell;
         this.opName = opName;
         this.qty = qty;
+        this.duration = duration;
         this.turn = turn;
         if (params) {
             this.params = params.slice();
@@ -66,6 +67,7 @@ class OpEntry {
         inputs.opSelect.value = this.opName;
         inputs.qtyInput.value = this.qty;
         inputs.numberContainer.value = this.turn;
+        inputs.durationInput.value = this.duration;
 
         for (let i = 0; i < this.params.length; ++i) {
             inputs.paramInputs[i].tagInput.value = this.params[i].tag;
@@ -135,6 +137,7 @@ class OpEntry {
         opEntry.workcell = w.getElementsByClassName("workcell-select")[0].value;
         opEntry.opName = w.getElementsByClassName("op-select")[0].value;
         opEntry.qty = w.getElementsByClassName("qty-input")[0].value;
+        opEntry.duration = w.getElementsByClassName("duration-input")[0].value;
         opEntry.turn = w.getElementsByClassName("number-container")[0].textContent.slice(1);
 
         let paramWidgets = w.getElementsByClassName("op-param-widget");
@@ -251,6 +254,7 @@ class OpEntry {
         inputs.opSelect = widget.getElementsByClassName("op-select")[0];
         inputs.numberContainer = widget.getElementsByClassName("number-container")[0];
         inputs.qtyInput = widget.getElementsByClassName("qty-input")[0];
+        inputs.durationInput = widget.getElementsByClassName("duration-input")[0];
         inputs.paramInputs = [];
 
         let paramWidgets = widget.getElementsByClassName("op-param-widget");

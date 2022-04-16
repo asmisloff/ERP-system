@@ -28,5 +28,10 @@
         <tagDatabase tag="v2"></tagDatabase>
     </changeSet>
     <include file="02/02.xml" relativeToChangelogFile="true"></include>
+
+    <changeSet id="3.0" author="asmisloff">
+        <tagDatabase tag="v3"></tagDatabase>
+    </changeSet>
+    <include file="03/01.xml" relativeToChangelogFile="true"></include>
     
 </databaseChangeLog>
